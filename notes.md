@@ -100,6 +100,27 @@ Go:
         corshandler := cors.Default().Handler(mux):
             aqui estou configurando o CORS para o multiplexador já criado, ou seja, todas as solicitações passadas através desse multiplexador vão ter o CORS configurado automaticamente
 
-        
+JS:
+    declaração de func:
+        function nomefunc(){}
+
+    React:
+
+        pra usar o react vc tem que importar ele, igual uma lib(no site do react ele diz q e uma lib kkkkkkk slk)
+
+        useState:
+            é um hook(nao entendi direito oq é um hook mas acho que é tipo uma lib)
+            usado para adicionar estado local ao componente, retorna 2 valores: o valor atual do estado, e uma func que permite atualizar o valor dele
+                estado local:
+                    capacidade de um componente de armazenar infos que podem mudar ao longo do tempo e afetar o que é renderizado no DOM
+                        DOM:
+                            document Object Model
+                            é uma representação estruturada do conteúdo de uma página na web, incluindo textos,imagens, links, scripts, e CSS
+        useEffect:
+            também é um hook
+            é usado para executar efeitos colaterais após a renderização do componente
+
+
+
 
     
