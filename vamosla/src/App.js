@@ -3,18 +3,51 @@ import React, {useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-  const [message, setMessage] = useState('')
+  const [currentRoute, setCurrentRoute] = useState('/');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetch('/api/oiee')
-      .then(response => response.text())
-      .then(data => setMessage(data));
-  }, [])
+    const fetchdata = async () =>{
+      let response;
+      if (currentRoute === '/'){
+        response = await fetch('http://192.168.0.178:8080/');
+        if (response.ok) {
+          const text = await response.text();
+          setMessage(text);
+        } else {
+          console.error('Erro ao buscar tela inicial', response.statusText);
+        }
+
+      }else if(currentRoute === '/ihm'){
+        response = await fetch ('http://192.168.0.178:8080/ihm');
+        if (response.ok) {
+          const text = await response.text();
+          setMessage(text);
+        } else {
+          console.error('Erro ao buscar tela inicial', response.statusText);
+        }
+
+      }else if(currentRoute === '/clp'){
+        response = await fetch ('http://192.168.0.178:8080/clp');
+        if (response.ok){
+          const text = await response.text();
+          setMessage(text);
+        }else{
+          console.error('erro ao buscar mensagens', response.statusText);
+        }
+      }
+    };
+
+    fetchdata();
+  },[currentRoute]);
 
   return (
     <div className="App">
-      <header className="Cabeçaho">
-        <p>{message}</p>
+      <header className="Cabeçalho">
+        <button onClick={() => setCurrentRoute('/')}>Tela Inicial</button>
+        <button onClick={() => setCurrentRoute('/ihm')}>Tela IHM</button>
+        <button onClick={() => setCurrentRoute('/clp')}>Tela CLP</button>
+          <p>{message}</p>
       </header>
     </div>
   );
