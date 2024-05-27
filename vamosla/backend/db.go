@@ -26,3 +26,8 @@ func addMSG(db *sql.DB, msg, timestamp string) error {
 	_, err := db.Exec("INSERT INTO msgs (msg, timestamp) VALUES(?, ?)", msg, timestamp)
 	return err
 }
+
+func DeletaLinha(db *sql.DB, id int) error {
+	_, err := db.Exec(`DELETE FROM msgs WHERE id = (?)`, id)
+	return err
+}

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/cors"
@@ -76,6 +78,28 @@ func TelaCLP(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(msgs)
 }
 
+func handlerDeleteMessage(db *sql.DB, w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodDelete {
+		idStr := r.URL.Query().Get("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "ID invalido", http.StatusBadRequest)
+			return
+		}
+
+		err = DeletaLinha(db, id)
+		if err != nil {
+			http.Error(w, "Falha ao excluir: ", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("linha excluida"))
+	} else {
+		http.Error(w, "metodo nao permitido", http.StatusMethodNotAllowed)
+	}
+}
+
 func main() {
 	db, err := initDB()
 	if err != nil {
@@ -89,6 +113,9 @@ func main() {
 	mux.HandleFunc("/", TelaInicial)
 	mux.HandleFunc("/ihm", ConecaIHM)
 	mux.HandleFunc("/clp", TelaCLP)
+	mux.HandleFunc("/clp/delete", func(w http.ResponseWriter, r *http.Request) {
+		handlerDeleteMessage(db, w, r)
+	})
 
 	corshandler := cors.Default().Handler(mux)
 
