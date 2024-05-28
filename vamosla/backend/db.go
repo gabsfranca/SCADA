@@ -1,6 +1,9 @@
 package main
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 func initDB() (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", "./webapp.db")
@@ -28,6 +31,17 @@ func addMSG(db *sql.DB, msg, timestamp string) error {
 }
 
 func DeletaLinha(db *sql.DB, id int) error {
-	_, err := db.Exec(`DELETE FROM msgs WHERE id = (?)`, id)
-	return err
+	fmt.Println("excluindo")
+	result, err := db.Exec(`DELETE FROM msgs WHERE id = ?`, id)
+	if err != nil {
+		return err
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("não foi possivel encontrar a linha %d para a exclusão", id)
+	}
+	return nil
 }

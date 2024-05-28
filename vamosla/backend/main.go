@@ -80,6 +80,7 @@ func TelaCLP(w http.ResponseWriter, r *http.Request) {
 
 func handlerDeleteMessage(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodDelete {
+		fmt.Println("excluindo")
 		idStr := r.URL.Query().Get("id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -114,6 +115,7 @@ func main() {
 	mux.HandleFunc("/ihm", ConecaIHM)
 	mux.HandleFunc("/clp", TelaCLP)
 	mux.HandleFunc("/clp/delete", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("tentao excluir lll")
 		handlerDeleteMessage(db, w, r)
 	})
 
