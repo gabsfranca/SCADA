@@ -80,23 +80,28 @@ func TelaCLP(w http.ResponseWriter, r *http.Request) {
 
 func handlerDeleteMessage(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodDelete {
-		fmt.Println("excluindo")
+		fmt.Println("delete requisitad")
 		idStr := r.URL.Query().Get("id")
+		fmt.Println("id recebido: ", idStr)
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
+			fmt.Println("id inválido", idStr)
 			http.Error(w, "ID invalido", http.StatusBadRequest)
 			return
 		}
 
 		err = DeletaLinha(db, id)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Falha ao excluir: ", http.StatusInternalServerError)
 			return
 		}
 
+		fmt.Println("deu certoooo")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("linha excluida"))
 	} else {
+		fmt.Println("deu merda", r.Method)
 		http.Error(w, "metodo nao permitido", http.StatusMethodNotAllowed)
 	}
 }

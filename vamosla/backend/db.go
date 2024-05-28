@@ -31,17 +31,21 @@ func addMSG(db *sql.DB, msg, timestamp string) error {
 }
 
 func DeletaLinha(db *sql.DB, id int) error {
-	fmt.Println("excluindo")
+	fmt.Printf("excluindo a linha %d", id)
 	result, err := db.Exec(`DELETE FROM msgs WHERE id = ?`, id)
 	if err != nil {
+		fmt.Println("erro", err)
 		return err
 	}
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
+		fmt.Println("erro ao contar linhas", err)
 		return err
 	}
 	if rowsAffected == 0 {
+		fmt.Println("nao deu boa piá", err)
 		return fmt.Errorf("não foi possivel encontrar a linha %d para a exclusão", id)
 	}
+	fmt.Printf("linha %d afetada: ", id)
 	return nil
 }
