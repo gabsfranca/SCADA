@@ -4,14 +4,14 @@ import './App.css';
 
 function App() {
   const [currentRoute, setCurrentRoute] = useState('/');
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchdata = async () =>{
       let response;
       if (currentRoute === '/'){
-        response = await fetch('http://172.31.0.248:8080/');
+        response = await fetch('http://192.168.0.162:8080/');
         if (response.ok) {
           const text = await response.text();
           setMessage(text);
@@ -20,7 +20,7 @@ function App() {
         }
 
       }else if(currentRoute === '/ihm'){
-        response = await fetch ('http://172.31.0.248:8080/ihm');
+        response = await fetch ('http://192.168.0.162:8080/ihm');
         if (response.ok) {
           const text = await response.text();
           setMessage(text);
@@ -29,7 +29,7 @@ function App() {
         }
 
       }else if(currentRoute === '/clp'){
-        response = await fetch ('http://172.31.0.248:8080/clp');
+        response = await fetch ('http://192.168.0.162:8080/clp');
         if (response.ok){
           const json = await response.json();
           setData(json);
@@ -41,6 +41,23 @@ function App() {
 
     fetchdata();
   },[currentRoute]);
+
+  const handleDelete = async (id) =>{
+    try{
+      const response = await fetch(`http://192.168.0.162:8080/clp/delete?id=${id}`,{
+        method: 'DELETE',
+      });
+      if (response.ok){
+        const text = await response.text();
+        setMessage(text)
+        setData(data.filter(item => item.ID !== id));
+      }else{
+        console.error('erro ao excluir linha', response.statusText);
+      }
+    }catch(error){
+      console.error('erro ao fazer requisição', error)
+    }
+  }
 
   const TelaTCP = () => (
     <table>
@@ -60,7 +77,7 @@ function App() {
               <td key={i}>{value}</td>
             )}
             <td>
-              <button onClick={() => setCurrentRoute('/clp/delete')}>Excluir linha</button>
+              <button onClick={() => handleDelete(item.ID)}>Excluir linha</button>
             </td>
           </tr>
         )}
