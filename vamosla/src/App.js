@@ -6,30 +6,47 @@ function App() {
   const [currentRoute, setCurrentRoute] = useState('/');
   const [data, setData] = useState([]);
   const [message, setMessage] = useState('');
-
+  const [mostraDashboard, setMostraDashboard] = useState(false);
+  const [dadosDashboard, setDadosDashboard] = useState([]);
+  
+  const mostraDadosDashboard = async () =>{
+    try{
+      const response = await fetch('/dashboard');
+      if (response.ok){
+        const data = await response.json();
+        setDadosDashboard(data);
+        setMostraDashboard(true);
+      }else{
+        console.error("erro ao buscar dados do dashboard: ", response.statusText);
+      }
+    }catch (error){
+      console.error('erro ao fazer aquisião', error)
+    }
+  };
+  
   useEffect(() => {
     const fetchdata = async () =>{
       let response;
       if (currentRoute === '/'){
-        response = await fetch('http://192.168.0.162:8080/');
+        response = await fetch('http://localhost:8080/');
         if (response.ok) {
           const text = await response.text();
           setMessage(text);
         } else {
           console.error('Erro ao buscar tela inicial', response.statusText);
         }
-
+        
       }else if(currentRoute === '/ihm'){
-        response = await fetch ('http://192.168.0.162:8080/ihm');
+        response = await fetch ('http://localhost:8080/ihm');
         if (response.ok) {
           const text = await response.text();
           setMessage(text);
         } else {
           console.error('Erro ao buscar tela inicial', response.statusText);
         }
-
+        
       }else if(currentRoute === '/clp'){
-        response = await fetch ('http://192.168.0.162:8080/clp');
+        response = await fetch ('http://localhost:8080/clp');
         if (response.ok){
           const json = await response.json();
           setData(json);
@@ -44,7 +61,7 @@ function App() {
 
   const handleDelete = async (id) =>{
     try{
-      const response = await fetch(`http://192.168.0.162:8080/clp/delete?id=${id}`,{
+      const response = await fetch(`/clp/delete?id=${id}`,{
         method: 'DELETE',
       });
       if (response.ok){
@@ -83,9 +100,20 @@ function App() {
         )}
       </tbody>
     </table>
-
-    
   )
+
+  const Dashboard = () =>(
+    <div>
+      <h2>dados do dashboard:</h2>
+      <ul>
+        {mostraDadosDashboard.map((item, index) =>(
+          <li key={index}>
+            ID: {item.ID}, Msg: {item.Msg}, Timestamp: {item.TimeStamp}
+        </li>
+      ))}
+     </ul>
+    </div>
+  );
 
   return (
     <div className="App">
@@ -93,10 +121,12 @@ function App() {
         <button onClick={() => setCurrentRoute('/')}>Tela Inicial</button>
         <button onClick={() => setCurrentRoute('/ihm')}>Tela IHM</button>
         <button onClick={() => setCurrentRoute('/clp')}>Tela CLP</button>
+        <button onClick={mostraDadosDashboard}>dashboard</button>
           <p>{message}</p>
       </header>
       <main>
         {currentRoute === '/clp' && <TelaTCP />}
+        {mostraDashboard && <div>dados do dashboard</div>}
       </main>
     </div>
   );

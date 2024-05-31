@@ -12,11 +12,13 @@ import (
 	"github.com/rs/cors"
 )
 
+//placeholder
 func TelaInicial(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("tela inicial")
 	fmt.Fprintln(w, "Tela inicial")
 }
 
+//plcaeholder
 func ConecaIHM(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("tela ihm")
 	fmt.Fprintln(w, "Lugar pra conectar IHM")
@@ -106,6 +108,57 @@ func handlerDeleteMessage(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func dashboard(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("dashdash")
+	db, err := initDB()
+	if err != nil {
+		http.Error(w, "erro ao acessar banco de dados", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT ID, Msg, TimeStamp FROM msgs ORDER BY timestamp")
+	if err != nil {
+		http.Error(w, "erro ao consultar banco de dados", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var dadosDashboard []struct {
+		ID        int    `json:"ID"`
+		Msg       string `json:"Msg"`
+		TimeStamp string `json:"TimeStamp"`
+	}
+
+	for rows.Next() {
+		var d struct {
+			ID        int
+			Msg       string
+			TimeStamp string
+		}
+		if err := rows.Scan(&d.ID, &d.Msg, &d.TimeStamp); err != nil {
+			http.Error(w, "erro lendo a linha tal", http.StatusInternalServerError)
+			return
+		}
+		dadosDashboard = append(dadosDashboard, struct {
+			ID        int    `json:"ID"`
+			Msg       string `json:"Msg"`
+			TimeStamp string `json:"TimeStamp"`
+		}{
+			ID:        d.ID,
+			Msg:       d.Msg,
+			TimeStamp: d.TimeStamp,
+		})
+	}
+
+	if err := rows.Err(); err != nil {
+		http.Error(w, "erro ao processar linhas do banco de dados ", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(dadosDashboard)
+}
+
 func main() {
 	db, err := initDB()
 	if err != nil {
@@ -123,6 +176,7 @@ func main() {
 		fmt.Println("tentao excluir lll")
 		handlerDeleteMessage(db, w, r)
 	})
+	mux.HandleFunc("/dashboard", dashboard)
 
 	corshandler := cors.Default().Handler(mux)
 
