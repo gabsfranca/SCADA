@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React, {useEffect, useState } from 'react';
 import './App.css';
 
@@ -11,7 +10,7 @@ function App() {
     const fetchdata = async () =>{
       let response;
       if (currentRoute === '/'){
-        response = await fetch('http://localhost:8080/');
+        response = await fetch('http://192.168.0.178:8080/');
         if (response.ok) {
           const text = await response.text();
           setMessage(text);
@@ -20,7 +19,7 @@ function App() {
         }
         
       }else if(currentRoute === '/ihm'){
-        response = await fetch ('http://localhost:8080/ihm');
+        response = await fetch ('http://192.168.0.178:8080/ihm');
         if (response.ok) {
           const text = await response.text();
           setMessage(text);
@@ -29,7 +28,7 @@ function App() {
         }
         
       }else if(currentRoute === '/clp'){
-        response = await fetch ('http://localhost:8080/clp');
+        response = await fetch ('http://192.168.0.178:8080/clp');
         if (response.ok){
           const json = await response.json();
           setData(json);
@@ -60,7 +59,7 @@ function App() {
   }
 
   const handleOpenDash = () =>{
-    window.open('http://localhost:4000/', '_blank')
+    window.open('http://192.168.0.178:4000/', '_blank')
   };
 
   const TelaTCP = () => (
@@ -95,7 +94,7 @@ function App() {
         <button onClick={() => setCurrentRoute('/')}>Tela Inicial</button>
         <button onClick={() => setCurrentRoute('/ihm')}>Tela IHM</button>
         <button onClick={() => setCurrentRoute('/clp')}>Tela CLP</button>
-        <button onClick={handleOpenDash}>Dashboard</button>
+        <button onClick={(handleOpenDash)}>Dashboard</button>
           <p>{message}</p>
       </header>
       <main>

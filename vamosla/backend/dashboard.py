@@ -7,10 +7,9 @@ import requests
 from flask_cors import CORS     
 from dash.dependencies import Input, Output, State
 from pytz import timezone
-import dash_core_components as dcc
 
 def pegaDados():
-    urlData = 'http://localhost:8080/clp'
+    urlData = 'http://192.168.0.178:8080/clp'
 
     response = requests.get(urlData)
     dadosJson = response.json()
@@ -86,4 +85,4 @@ def atualizaDash(start_date, end_date, n_intervals):
     return figFiltered
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=4000)
+    app.run_server(debug=True, host='192.168.0.178', port=4000)

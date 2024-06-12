@@ -14,14 +14,41 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #1d5ad3;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
+  color: rgb(37, 83, 233);
+}
+
+header{
+  background-color: #0e3a92;
   color: white;
+}
+
+button{
+  margin: 0 130px;
+  background-color: #1d5ad3;
+  color: white;
+  border-radius: 20px;
+}
+
+
+thead{
+  margin: 0 30px
+}
+
+table{
+  background-color: #796bf1;
+  margin: 0 10px;
+  flex-direction: column;
+}
+
+thead{
+  background-color: #6b74f1;
 }
 
 .App-link {
