@@ -6,23 +6,6 @@ function App() {
   const [currentRoute, setCurrentRoute] = useState('/');
   const [data, setData] = useState([]);
   const [message, setMessage] = useState('');
-  const [mostraDashboard, setMostraDashboard] = useState(false);
-  const [dadosDashboard, setDadosDashboard] = useState([]);
-  
-  const mostraDadosDashboard = async () =>{
-    try{
-      const response = await fetch('/dashboard');
-      if (response.ok){
-        const data = await response.json();
-        setDadosDashboard(data);
-        setMostraDashboard(true);
-      }else{
-        console.error("erro ao buscar dados do dashboard: ", response.statusText);
-      }
-    }catch (error){
-      console.error('erro ao fazer aquisião', error)
-    }
-  };
   
   useEffect(() => {
     const fetchdata = async () =>{
@@ -76,6 +59,10 @@ function App() {
     }
   }
 
+  const handleOpenDash = () =>{
+    window.open('http://localhost:4000/', '_blank')
+  };
+
   const TelaTCP = () => (
     <table>
       <thead>
@@ -102,31 +89,17 @@ function App() {
     </table>
   )
 
-  const Dashboard = () =>(
-    <div>
-      <h2>dados do dashboard:</h2>
-      <ul>
-        {mostraDadosDashboard.map((item, index) =>(
-          <li key={index}>
-            ID: {item.ID}, Msg: {item.Msg}, Timestamp: {item.TimeStamp}
-        </li>
-      ))}
-     </ul>
-    </div>
-  );
-
   return (
     <div className="App">
       <header className="Cabeçalho">
         <button onClick={() => setCurrentRoute('/')}>Tela Inicial</button>
         <button onClick={() => setCurrentRoute('/ihm')}>Tela IHM</button>
         <button onClick={() => setCurrentRoute('/clp')}>Tela CLP</button>
-        <button onClick={mostraDadosDashboard}>dashboard</button>
+        <button onClick={handleOpenDash}>Dashboard</button>
           <p>{message}</p>
       </header>
       <main>
         {currentRoute === '/clp' && <TelaTCP />}
-        {mostraDashboard && <div>dados do dashboard</div>}
       </main>
     </div>
   );

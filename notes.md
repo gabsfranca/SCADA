@@ -12,6 +12,19 @@ API:
         pelo que eu entendi: o front nao precisa se comunicar com o back, ele se comunica com o middleware, que se comunica com o back
 
 Go:
+
+    fmt:
+        para formatação de texto(tipo o stdio)
+
+    log:
+        para registrar erros ou informações
+
+    strconv:
+        Para conversões de tipos primitivos
+
+    encoding/json:
+        para codificar e decodificar jsons
+        
     http:
         ResponseWriter:
             w http.ResponseWriter é um obj que representa uma resposta HTTP que será enviada ao cliente
@@ -95,10 +108,27 @@ Go:
         http.ListenAndServe(":portaqvcquer", corshandler):
             inicia um sv na porta que vc passou, e usa o corshandler(cors -> corshandler) para configurar o cors para as solicitações feitas nessa porta.
 
+    database/sql:
+        serve para interagir com o db SQL com o  SQLite3
+
+        db, err := sql.Open("sqlite3", "nome do db"):
+            abre a conexao com o db sem se conectar com ele(só vai conectar qnd fizer um query)
+
+        para executar um query:
+            _, err := db.EXEC(`COMANDO SQL`)
+            note que o comando está entre acentos graves
+
+    github.com/mattn/go-sqlite3:
+        para drivers do sqlite3
+
+
     github.com/rs/cors:
 
         corshandler := cors.Default().Handler(mux):
             aqui estou configurando o CORS para o multiplexador já criado, ou seja, todas as solicitações passadas através desse multiplexador vão ter o CORS configurado automaticamente
+
+    
+
 
 JS:
     declaração de func:
@@ -120,6 +150,20 @@ JS:
             também é um hook
             é usado para executar efeitos colaterais após a renderização do componente
 
+
+SQL:
+
+    CREATE TABLE nomedatabela(atributo tipoatributo PRIMARY KEY(opcional) AUTOINCREMENT(se quiser que some 1 unidade a cada um criada NOT NULL(se n puder ser nulo))):
+
+        cria tabela né kkkkkkkkk
+        não sei se é exclusivo do sqlite, mas da pra dar um CREATE TABLE IF NOT EXISTS, que ai só cria se nao existir KKKKKKKKKKKKKKKKKK
+
+    "INSERT INTO nomedatabela(atributo, atributo) VALUES (?,?)", variavel, variavel:
+        o nome ja é explicativo, mas a interrogação funciona igual o %d no go, o em c, é o valor que vai ser substituido
+
+    
+
+    
 
 
 
